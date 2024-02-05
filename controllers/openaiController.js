@@ -12,9 +12,6 @@ const generateMeta = async (req, res) => {
         ],
         max_tokens: 100
     })
-    res.status(200).json({
-        description: description.choices[0].message.content
-    })
 
     const tags = await openai.chat.completions.create({
         model: "gpt-3.5-turbo",
@@ -27,7 +24,11 @@ const generateMeta = async (req, res) => {
         max_tokens: 100
     })
 
-    console.log(tags.choices[0].message.content)
+    res.status(200).json({
+        description: description.choices[0].message.content,
+        tags: tags.choices[0].message.content
+    })
+
 }
 
 const generateImage = async (req, res) => {
@@ -36,7 +37,7 @@ const generateImage = async (req, res) => {
         size: "1024x1024",
         prompt: req.body.prompt
     })
-    
+
     res.status(200).json({
         url: image.data[0].url
     })
